@@ -3,6 +3,8 @@
 
 Удобный активатор для Windows, написанный на Python. Требует подключение к интернету для активации.
 
+![](https://raw.githubusercontent.com/buvanenko/pokms/main/screenshot.jpg)
+
 ## Список поддерживаемых редакций
 *Для активации Windows 11 используйте смежную редакцию Windows 10.*
 
