@@ -10,7 +10,7 @@ from PyQt6.QtWidgets import (
     QMessageBox,
     QListWidget,
 )
-from data import get
+from data import get, ver
 
 
 def is_admin():
@@ -30,10 +30,15 @@ class MainWindow(QMainWindow):
             sys.exit(1)
 
         try:
-            self.hosts, self.keys = get()
+            self.hosts, self.keys, self.actual_version = get()
         except Exception:
-            self.show_message("Ошибка", 'Не удалось получить данные. Проверьте подключение к интернету.')
+            self.show_message(
+                "Ошибка",
+                "Не удалось получить данные. Проверьте подключение к интернету.",
+            )
             sys.exit(1)
+        if self.actual_version["ver"] != ver:
+            self.show_update_message(self.actual_version)
 
         self.l = QListWidget()
         self.l.addItems(self.keys.keys())
@@ -53,6 +58,19 @@ class MainWindow(QMainWindow):
 
     def show_message(self, title, text):
         QMessageBox.information(self, title, text)
+
+    def show_update_message(self, version):
+        text = f"Доступна новая версия: {version['ver']}. Обновить?"
+        msg = QMessageBox.information(
+            self,
+            "Обновление",
+            text,
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.Yes,
+        )
+        if msg == QMessageBox.StandardButton.Yes:
+            subprocess.Popen(f"start {version['link']}", shell=True)
+            sys.exit(0)
 
     def enable_button(self):
         self.centralWidget().setText("Активировать!")
@@ -124,5 +142,6 @@ def activation_thread():
         "Готово",
         f"Работа активатора завершена. Система активирована до {str(out).split(' ')[-2]}.",
     )
+
 
 app.exec()
