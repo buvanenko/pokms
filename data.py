@@ -1,6 +1,6 @@
 import requests
 
-ver = "0.3.0"
+ver = "0.4.0"
 
 def get():
     hosts = requests.get('https://raw.githubusercontent.com/buvanenko/online-kms/main/hosts').text.split("\n")
